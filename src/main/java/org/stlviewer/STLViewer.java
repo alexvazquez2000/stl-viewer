@@ -316,6 +316,8 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		} catch (IllegalArgumentException e) {
 			lstatusline.setText("no data read, possible file error");
 			logger.warn(e.getMessage());
+			//TODO: add a better message that an error occured
+			e.printStackTrace();
 		}
 	}
 
@@ -424,6 +426,7 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 
 	@Override
 	public void windowOpened(WindowEvent e) {
+		//nothing to do
 	}
 
 	@Override
@@ -434,27 +437,27 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-
+		//nothing to do
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-
+		//nothing to do
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-
+		//nothing to do
 	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-
+		//nothing to do
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-
+		//nothing to do
 	}
 
 }
