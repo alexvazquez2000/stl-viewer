@@ -53,7 +53,8 @@ public class TestApp {
 	 * @param arg ignored
 	 */
 	public static void main(String[] arg) {
-		File f = askForFile();
+		//File f = askForFile();
+		File f = new File("/Users/alexv/Downloads/PirateCoins/woman_pirate.stl");
 		if (f == null) {
 			// canceled by user
 			Logger.getLogger(STLParser.class.getName()).log(Level.WARNING, "Canceled by user");
