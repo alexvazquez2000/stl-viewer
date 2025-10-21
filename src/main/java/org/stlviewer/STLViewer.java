@@ -226,7 +226,9 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		// Look for the image.
 		String imgLocation = "/images/" + imageName;
 		URL imageURL = getClass().getResource(imgLocation);
-
+		if (imageURL == null) {
+			logger.error("Image resource '" + imgLocation + "' not found!");
+		}
 		// Create and initialize the button.
 		JButton button = new JButton();
 		button.setActionCommand(actionCommand);
