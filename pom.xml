@@ -6,11 +6,13 @@
     <artifactId>stl-viewer</artifactId>
     <version>1.0.0</version>
     <properties>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j-api.version>2.25.2</log4j-api.version>
     </properties>
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src</directory>
@@ -23,9 +25,6 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
-                <configuration>
-                    <release>21</release>
-                </configuration>
             </plugin>
             <plugin>
                 <!-- https://maven.apache.org/plugins/maven-jar-plugin/ -->
@@ -50,8 +49,8 @@
     </build>
     <repositories>
         <repository>
-            <id>jogamp</id>
-            <name>JogAmp Community Repository</name>
+            <id>jogamp-java3d</id>
+            <name>jogamp-java3d</name>
             <url>https://jogamp.org/deployment/maven-java3d/</url>
         </repository>
     </repositories>
@@ -68,23 +67,24 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j-api.version}</version>
         </dependency>
-        <!-- https://jogamp.org/wiki/index.php?title=Maven -->
+        <!-- https://mvnrepository.com/artifact/org.jogamp.java3d/java3d-core -->
         <dependency>
-            <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt-main</artifactId>
-            <version>2.6.0</version>
+            <groupId>org.jogamp.java3d</groupId>
+            <artifactId>java3d-core</artifactId>
+            <version>1.7.2</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jogamp.java3d/java3d-utils -->
         <dependency>
-            <groupId>org.jogamp.jogl</groupId>
-            <artifactId>jogl-all-main</artifactId>
-            <version>2.6.0</version>
+            <groupId>org.jogamp.java3d</groupId>
+            <artifactId>java3d-utils</artifactId>
+            <version>1.7.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jogamp.java3d/vecmath -->
         <dependency>
             <groupId>org.jogamp.java3d</groupId>
             <artifactId>vecmath</artifactId>
-            <version>1.8.0</version>
+            <version>1.7.2</version>
         </dependency>
-
+        <!-- https://jogamp.org/wiki/index.php?title=Maven -->
     </dependencies>
 </project>
