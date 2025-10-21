@@ -135,7 +135,7 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		mnstrp = new JCheckBoxMenuItem("Regen Normals/Connect strips", true);
 		mnstrp.addActionListener(this);
 		mtools.add(mnstrp);
-		boolean mousefix = pref.getBoolean("mousefix", false);
+		//boolean mousefix = pref.getBoolean("mousefix", false);
 
 		JMenuItem mmousefix = new JMenuItem("fix mouse interactions");
 		mmousefix.setActionCommand("MOUSEFIX");

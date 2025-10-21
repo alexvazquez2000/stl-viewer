@@ -24,7 +24,7 @@ import hall.collin.christopher.stl4j.Vec3d;
 
 public class PModel extends BranchGroup {
 
-	private static Logger logger = Logger.getLogger(PModel.class.getName());
+	//private static Logger logger = Logger.getLogger(PModel.class.getName());
 
 	private boolean bnormstrip = true;
 
