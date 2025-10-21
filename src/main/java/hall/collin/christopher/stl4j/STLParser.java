@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ public class STLParser {
 		// read file to array of triangles
 		List<Triangle> mesh;
 		if (isASCIISTL) {
-			Charset charset = Charset.forName("UTF-8");
+			Charset charset = StandardCharsets.UTF_8;
 			mesh = readASCII(charset.decode(ByteBuffer.wrap(allBytes)).toString().toLowerCase());
 		} else {
 			mesh = readBinary(allBytes);
@@ -116,7 +117,7 @@ public class STLParser {
 	public String readblock(byte[] allBytes, int offset, int length) {
 		if (allBytes.length - offset < length)
 			length = allBytes.length - offset;
-		Charset charset = Charset.forName("UTF-8");
+		Charset charset = StandardCharsets.UTF_8;
 		CharBuffer decode = charset.decode(ByteBuffer.wrap(allBytes, offset, length));
 		return decode.toString().toLowerCase();
 	}
@@ -143,8 +144,9 @@ public class STLParser {
 	}
 
 	public boolean isbinaryfile(byte[] allBytes) throws IllegalArgumentException {
-		if (allBytes.length < 84)
+		if (allBytes.length < 84) {
 			throw new IllegalArgumentException("invalid binary file, length<84");
+		}
 		int numtriangles = byteatoint(Arrays.copyOfRange(allBytes, 80, 84));
 		if (allBytes.length >= 84 + numtriangles * 50)
 			return true; // is binary file
@@ -155,8 +157,10 @@ public class STLParser {
 	}
 
 	// little endian
-	public int byteatoint(byte[] bytes) {
-		assert (bytes.length == 4);
+	public int byteatoint(byte[] bytes) throws IllegalArgumentException {
+		if (bytes.length != 4) {
+			throw new IllegalArgumentException("Little endian bytes lenght== 4");
+		};
 		int r = 0;
 		r = bytes[0] & 0xff;
 		r |= (bytes[1] & 0xff) << 8;
@@ -166,7 +170,7 @@ public class STLParser {
 	}
 
 	public byte[] inttobytea(int value) {
-		byte bytes[] = new byte[4];
+		byte[] bytes = new byte[4];
 		bytes[0] = (byte) value;
 		bytes[1] = (byte) (value >> 8);
 		bytes[2] = (byte) (value >> 16);
@@ -245,14 +249,17 @@ public class STLParser {
 	 *         file.
 	 * @throws IllegalArgumentException Thrown if the STL is not properly formatted
 	 */
-	public List<Triangle> readBinary(byte[] allBytes) throws IllegalArgumentException {
+	private List<Triangle> readBinary(byte[] allBytes) throws IllegalArgumentException {
 		Logger.getLogger(STLParser.class.getName()).log(Level.FINEST, "Parsing binary STL format");
 		DataInputStream in = new DataInputStream(new ByteArrayInputStream(allBytes));
 		ArrayList<Triangle> triangles = new ArrayList<>();
 		try {
 			// skip the header
 			byte[] header = new byte[80];
-			in.read(header);
+			int headerReadSize  = in.read(header);
+			if (headerReadSize != 80) {
+				throw new IllegalArgumentException("Could not read 80 bytes for the STL header");
+			}
 			// get number triangles (not really needed)
 			// WARNING: STL FILES ARE SMALL-ENDIAN
 			int numberTriangles = Integer.reverseBytes(in.readInt());
@@ -262,6 +269,7 @@ public class STLParser {
 				while (in.available() > 0) {
 					float[] nvec = new float[3];
 					for (int i = 0; i < nvec.length; i++) {
+						//Normal vector
 						nvec[i] = Float.intBitsToFloat(Integer.reverseBytes(in.readInt()));
 					}
 					//Vec3d normal = new Vec3d(nvec[0], nvec[1], nvec[2]); // not used (yet)
@@ -269,11 +277,14 @@ public class STLParser {
 					for (int v = 0; v < vertices.length; v++) {
 						float[] vals = new float[3];
 						for (int d = 0; d < vals.length; d++) {
+							//each vertex has 12 bytes
 							vals[d] = Float.intBitsToFloat(Integer.reverseBytes(in.readInt()));
 						}
 						vertices[v] = new Vec3d(vals[0], vals[1], vals[2]);
 					}
-					//short attribute = Short.reverseBytes(in.readShort()); // not used (yet)
+					@SuppressWarnings("unused")
+					//the attribute has 2 bytes
+					short attribute = Short.reverseBytes(in.readShort()); // not used (yet)
 					triangles.add(new Triangle(vertices[0], vertices[1], vertices[2]));
 				}
 			} catch (Exception ex) {
