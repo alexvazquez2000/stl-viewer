@@ -10,9 +10,6 @@ import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
@@ -21,12 +18,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -36,8 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -50,34 +43,34 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jogamp.java3d.utils.behaviors.vp.OrbitBehavior;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
-import org.jogamp.java3d.utils.universe.Viewer;
-import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.stlviewer.OrbitBehaviorFix.TFunc;
 
 import hall.collin.christopher.stl4j.STLParser;
 import hall.collin.christopher.stl4j.Triangle;
 
 public class STLViewer extends JFrame implements ActionListener, WindowListener {
-	
+
+	/** Generated serial value */
+	private static final long serialVersionUID = -7423993584436101462L;
+
 	Logger logger = LogManager.getLogger(STLViewer.class);
-	
+
 	PCanvas3D canvas;
 	JLabel lstatusline;
 	PModel model;
 	SimpleUniverse universe;
-	
+
 	private Preferences pref = Preferences.userNodeForPackage(org.stlviewer.STLViewer.class);
 	private CommandLine cmdline;
 
-	JCheckBoxMenuItem mnstrp;	
-	
+	JCheckBoxMenuItem mnstrp;
+
 	public STLViewer(String args[]) throws HeadlessException {
 		super("STL Viewer");
 		parseargs(args);
-		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);		
+
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		createwin();
 		addWindowListener(this);
 	}
@@ -89,12 +82,12 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		DefaultParser parser = new DefaultParser();
 		try {
 			cmdline = parser.parse(options, args);
-			
-			if(cmdline.hasOption("help")) {
+
+			if (cmdline.hasOption("help")) {
 				showhelp(options);
 				System.exit(0);
-			}						
-			
+			}
+
 		} catch (ParseException e) {
 			logger.error(e);
 			showhelp(options);
@@ -102,7 +95,7 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		}
 		return cmdline.getArgs();
 	}
-	
+
 	private void showhelp(Options options) {
 		String appname = "stlviewer.jar";
 		HelpFormatter formatter = new HelpFormatter();
@@ -112,9 +105,8 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 
 	public void createwin() {
 
-		
 		setPreferredSize(new Dimension(1024, 768));
-		
+
 		JMenuBar mbar = new JMenuBar();
 		JMenu mfile = new JMenu("File");
 		mfile.setMnemonic(KeyEvent.VK_F);
@@ -140,85 +132,85 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		msnap.setActionCommand("TSNAP");
 		msnap.addActionListener(this);
 		mtools.add(msnap);
-		mnstrp = new JCheckBoxMenuItem("Regen Normals/Connect strips",true);
+		mnstrp = new JCheckBoxMenuItem("Regen Normals/Connect strips", true);
 		mnstrp.addActionListener(this);
-		mtools.add(mnstrp);		
+		mtools.add(mnstrp);
 		boolean mousefix = pref.getBoolean("mousefix", false);
-		
+
 		JMenuItem mmousefix = new JMenuItem("fix mouse interactions");
 		mmousefix.setActionCommand("MOUSEFIX");
 		mmousefix.addActionListener(this);
-		mtools.add(mmousefix);		
+		mtools.add(mmousefix);
 		mbar.add(mtools);
-		
+
 		setJMenuBar(mbar);
 
 		JToolBar toolbar = new JToolBar();
 		JButton button = null;
-						
+
 		button = makeNavigationButton("Open24.gif", "FOPEN", "Open", "Open");
 		toolbar.add(button);
 		button = makeNavigationButton("Home24.gif", "VHOME", "Home", "Home");
 		toolbar.add(button);
 		button = makeNavigationButton("camera.png", "TSNAP", "Snapshot", "Snapshot");
 		toolbar.add(button);
-		
+
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(toolbar, BorderLayout.NORTH);
-		
+
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		canvas = new PCanvas3D(config);
-		getContentPane().add(canvas, BorderLayout.CENTER);		
-		
+		getContentPane().add(canvas, BorderLayout.CENTER);
+
 		lstatusline = new JLabel(" ");
 		getContentPane().add(lstatusline, BorderLayout.SOUTH);
-		
+
 		universe = new SimpleUniverse(canvas);
 		canvas.initcanvas(universe);
 		loadbuttonbind();
-		
+
 		pack();
-		
+
 		loadinitstl();
-		setLocationRelativeTo(null);		
+		setLocationRelativeTo(null);
 		setVisible(true);
-				
+
 	}
-	
+
 	private void loadinitstl() {
-		if(cmdline.getArgs().length > 0) {
+		if (cmdline.getArgs().length > 0) {
 			String filename = cmdline.getArgs()[0];
 			File file = new File(filename);
-			if(file.isFile() && file.exists()) {
+			if (file.isFile() && file.exists()) {
 				logger.info("loading {}", filename);
 				loadfile(file);
 			}
-				
-		}		
+
+		}
 	}
 
 	private void loadbuttonbind() {
 		Map<OrbitBehaviorFix.TFunc, BtnBind> maptfb = canvas.getMaptfb();
-		
+
 		String bind = pref.get("RotateBind", null);
-		if(!(bind == null || bind == "")) {
+		if (!(bind == null || bind == "")) {
 			BtnBind b = new BtnBind(OrbitBehaviorFix.TFunc.ROTATE);
 			b.parseBtnStr(bind);
 			maptfb.put(TFunc.ROTATE, b);
 		}
 		bind = pref.get("TranslateBind", null);
-		if(!(bind == null || bind == "")) {
+		if (!(bind == null || bind == "")) {
 			BtnBind b = new BtnBind(OrbitBehaviorFix.TFunc.TRANSLATE);
 			b.parseBtnStr(bind);
 			maptfb.put(TFunc.TRANSLATE, b);
 		}
 		bind = pref.get("ZoomBind", null);
-		if(!(bind == null || bind == "")) {
+		if (!(bind == null || bind == "")) {
 			BtnBind b = new BtnBind(OrbitBehaviorFix.TFunc.ZOOM);
 			b.parseBtnStr(bind);
 			maptfb.put(TFunc.ZOOM, b);
 		}
-		canvas.fixmouseinteraction(universe, maptfb);		
+		canvas.fixmouseinteraction(universe, maptfb);
 	}
 
 	private void savebuttonbind(Map<OrbitBehaviorFix.TFunc, BtnBind> maptfb) {
@@ -229,6 +221,7 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		b = maptfb.get(OrbitBehaviorFix.TFunc.ZOOM);
 		pref.put("ZoomBind", b.getBtnStr());
 	}
+
 	protected JButton makeNavigationButton(String imageName, String actionCommand, String toolTipText, String altText) {
 		// Look for the image.
 		String imgLocation = "/images/" + imageName;
@@ -247,32 +240,30 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		}
 
 		return button;
-	}	
-	
-		
-	
+	}
+
 	private File currdir;
-	
+
 	private String getlastdir() {
 		String last_dir = pref.get("last_dir", "");
-		if(last_dir != "") {
+		if (last_dir != "") {
 			currdir = new File(last_dir);
-			if(!currdir.isDirectory()) {
+			if (!currdir.isDirectory()) {
 				currdir = null;
 				return last_dir;
 			}
-		} else 
-		  last_dir = null;
-		
+		} else
+			last_dir = null;
+
 		return last_dir;
 	}
-	
-	private File askForFile(){
-		
+
+	private File askForFile() {
+
 		int action;
 		JFileChooser jfc = new JFileChooser(getlastdir());
 		action = jfc.showOpenDialog(null);
-		if(action != JFileChooser.APPROVE_OPTION){
+		if (action != JFileChooser.APPROVE_OPTION) {
 			return null;
 		}
 		File file = jfc.getSelectedFile();
@@ -286,39 +277,40 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 					pref.flush();
 				} catch (BackingStoreException e) {
 				}
-			} catch (IOException e) {				
+			} catch (IOException e) {
 			}
 		}
 		return file;
 	}
-			
+
 	private void loadfile(File file) {
 		if (file == null) {
 			file = askForFile();
-			if(file == null) return;
+			if (file == null)
+				return;
 		}
-		
+
 		// read file to array of triangles
 		try {
-			
-			List<Triangle> mesh = new STLParser().parseSTLFile(file.toPath());			
-			
+
+			List<Triangle> mesh = new STLParser().parseSTLFile(file.toPath());
+
 			if (mesh == null || mesh.isEmpty()) {
 				lstatusline.setText("no data read, possible file error");
 				return;
 			} else
 				lstatusline.setText(" ");
-			
-			if(model != null)
-				model.cleanup();			
+
+			if (model != null)
+				model.cleanup();
 			model = new PModel();
 			model.setBnormstrip(mnstrp.isSelected());
 			model.addtriangles(mesh);
-			//model.loadstl(file);
-			
+			// model.loadstl(file);
+
 			canvas.rendermodel(model, universe);
-			//canvas.fixmouseinteraction(universe, null);
-			
+			// canvas.fixmouseinteraction(universe, null);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -327,56 +319,58 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 		}
 	}
 
-	private File filesavedialog(FileNameExtensionFilter filter ){
-		
+	private File filesavedialog(FileNameExtensionFilter filter) {
+
 		int action;
 		JFileChooser jfc = new JFileChooser(currdir);
-		if (filter != null) jfc.setFileFilter(filter);
+		if (filter != null)
+			jfc.setFileFilter(filter);
 		action = jfc.showSaveDialog(null);
-		if(action != JFileChooser.APPROVE_OPTION){
+		if (action != JFileChooser.APPROVE_OPTION) {
 			return null;
 		}
 		File file = jfc.getSelectedFile();
-		if (file.getParentFile() != null) currdir = file.getParentFile();		
+		if (file.getParentFile() != null)
+			currdir = file.getParentFile();
 		return file;
 	}
-	
+
 	class SnapRun implements Runnable {
 
 		File file;
+
 		public SnapRun(File file) {
 			this.file = file;
 		}
-		
+
 		@Override
 		public void run() {
-		    Robot r;
+			Robot r;
 			try {
 				r = new Robot();
 			} catch (AWTException e1) {
 				e1.printStackTrace();
 				return;
 			}
-		    BufferedImage snapshot = r.createScreenCapture(new java.awt.Rectangle(
-			            (int) canvas.getLocationOnScreen().getX(), 
-			            (int) canvas.getLocationOnScreen().getY(), 
-			            canvas.getBounds().width,
-			            canvas.getBounds().height));
+			BufferedImage snapshot = r.createScreenCapture(new java.awt.Rectangle(
+					(int) canvas.getLocationOnScreen().getX(), (int) canvas.getLocationOnScreen().getY(),
+					canvas.getBounds().width, canvas.getBounds().height));
 			try {
-				ImageIO.write(snapshot,"PNG",file);
+				ImageIO.write(snapshot, "PNG", file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
-	
+
 	private void snapshot() {
-		
+
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG file", "png");
 		File file = filesavedialog(filter);
-		if(file == null) return;
-		if(!file.getName().endsWith(".png")) {
+		if (file == null)
+			return;
+		if (!file.getName().endsWith(".png")) {
 			try {
 				file = new File(file.getCanonicalPath().concat(".png"));
 			} catch (IOException e) {
@@ -384,53 +378,52 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 				return;
 			}
 		}
-		
+
 		canvas.invalidate();
 		canvas.repaint();
 		SwingUtilities.invokeLater(new SnapRun(file));
-		
+
 	}
 
 	private void domousefix() {
-		Map<OrbitBehaviorFix.TFunc,BtnBind> maptfb = canvas.getMaptfb();
+		Map<OrbitBehaviorFix.TFunc, BtnBind> maptfb = canvas.getMaptfb();
 		DlgMouseControl dlg = new DlgMouseControl(this, maptfb);
 		dlg.pack();
 		dlg.setLocationRelativeTo(this);
-		int ret = dlg.showdialog(); 						
+		int ret = dlg.showdialog();
 		if (ret == DlgMouseControl.RET_OK) {
 			maptfb = dlg.getMaptfb();
 			canvas.fixmouseinteraction(universe, maptfb);
-			savebuttonbind(maptfb);			
+			savebuttonbind(maptfb);
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("FOPEN")) {
-			loadfile(null);			
-		} else if(e.getActionCommand().equals("VHOME")) {
+		if (e.getActionCommand().equals("FOPEN")) {
+			loadfile(null);
+		} else if (e.getActionCommand().equals("VHOME")) {
 			canvas.homeview(universe);
-		} else if(e.getActionCommand().equals("TSNAP")) {
-			snapshot();	
-		} else if(e.getActionCommand().equals("MOUSEFIX")) {
+		} else if (e.getActionCommand().equals("TSNAP")) {
+			snapshot();
+		} else if (e.getActionCommand().equals("MOUSEFIX")) {
 			domousefix();
-		} else if(e.getActionCommand().equals("ABOUT")) {
+		} else if (e.getActionCommand().equals("ABOUT")) {
 			About a = new About();
 			a.pack();
 			Point p = this.getLocationOnScreen();
-			a.setLocation(new Point(p.x+100,p.y+100));
+			a.setLocation(new Point(p.x + 100, p.y + 100));
 			a.setVisible(true);
-			
+
 		}
 	}
-
 
 	public static void main(String[] args) {
 		new STLViewer(args);
 	}
 
 	@Override
-	public void windowOpened(WindowEvent e) {		
+	public void windowOpened(WindowEvent e) {
 	}
 
 	@Override
@@ -441,27 +434,27 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		
+
 	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		
+
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-		
+
 	}
 
 }

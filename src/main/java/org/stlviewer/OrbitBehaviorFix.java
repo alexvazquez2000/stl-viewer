@@ -910,7 +910,7 @@ public class OrbitBehaviorFix extends ViewPlatformAWTBehavior {
 	boolean rotate(MouseEvent evt) {
 		if (rotateEnabled) {
 			BtnBind btnbind = maptfb.get(TFunc.ROTATE);
-			if (btnbind != null) 
+			if (btnbind != null)
 				return checkButtonBind(btnbind, evt);
 		}
 		return false;
@@ -923,8 +923,9 @@ public class OrbitBehaviorFix extends ViewPlatformAWTBehavior {
 				if (evt instanceof java.awt.event.MouseWheelEvent) {
 					return true;
 				}
-				if (btnbind != null) 
-					return checkButtonBind(btnbind, evt);			}
+				if (btnbind != null)
+					return checkButtonBind(btnbind, evt);
+			}
 		}
 		return false;
 	}
@@ -932,12 +933,12 @@ public class OrbitBehaviorFix extends ViewPlatformAWTBehavior {
 	boolean translate(MouseEvent evt) {
 		if (translateEnabled) {
 			BtnBind btnbind = maptfb.get(TFunc.TRANSLATE);
-			if (btnbind != null)  
+			if (btnbind != null)
 				return checkButtonBind(btnbind, evt);
 		}
 		return false;
 	}
-	
+
 	private boolean checkButtonBind(BtnBind btnbind, MouseEvent evt) {
 		if (btnbind.checkBtn(MouseBtn.LEFT, evt.isControlDown(), evt.isShiftDown())
 				&& SwingUtilities.isLeftMouseButton(evt)) {

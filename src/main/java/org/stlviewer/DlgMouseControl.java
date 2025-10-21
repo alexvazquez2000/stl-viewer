@@ -14,33 +14,34 @@ import javax.swing.JPanel;
 
 public class DlgMouseControl extends JDialog implements ActionListener {
 
+	/** Generated serial value */
+	private static final long serialVersionUID = -1103065857109437363L;
 	public final static int RET_OK = 1;
 	public final static int RET_CANCEL = 0;
-	
+
 	int ret;
-	
-	Map<OrbitBehaviorFix.TFunc,BtnBind> maptfb;
-	
+
+	Map<OrbitBehaviorFix.TFunc, BtnBind> maptfb;
+
 	WBtnBind wbrot;
 	WBtnBind wbzoom;
 	WBtnBind wbtrans;
-	
+
 	JLabel lblmsg;
-	
-	
-	public DlgMouseControl(Frame owner, Map<OrbitBehaviorFix.TFunc,BtnBind> maptfb) {
+
+	public DlgMouseControl(Frame owner, Map<OrbitBehaviorFix.TFunc, BtnBind> maptfb) {
 		super(owner, "mouse control", true);
 		this.maptfb = maptfb;
-		
+
 		createdlg();
 	}
 
 	private void createdlg() {
-		
+
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
-		
+
 		JPanel p = new JPanel();
-		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));		
+		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 		JLabel l = new JLabel("Rotate");
 		l.setAlignmentX(LEFT_ALIGNMENT);
 		p.add(l);
@@ -61,16 +62,17 @@ public class DlgMouseControl extends JDialog implements ActionListener {
 		p.add(wbtrans);
 		p.setAlignmentX(LEFT_ALIGNMENT);
 		getContentPane().add(p);
-		
+
 		lblmsg = new JLabel("   ");
 		lblmsg.setAlignmentX(LEFT_ALIGNMENT);
 		getContentPane().add(lblmsg);
-		
+
 		JPanel p1 = new JPanel();
 		JButton btnOk = new JButton("OK");
 		btnOk.setActionCommand("OK");
 		btnOk.addActionListener(this);
-		btnOk.setAlignmentX(CENTER_ALIGNMENT);;
+		btnOk.setAlignmentX(CENTER_ALIGNMENT);
+		;
 		p1.add(btnOk);
 
 		JButton btnCanc = new JButton("Cancel");
@@ -91,10 +93,9 @@ public class DlgMouseControl extends JDialog implements ActionListener {
 		BtnBind bbrot = wbrot.getBtnbind();
 		BtnBind bbzoom = wbzoom.getBtnbind();
 		BtnBind bbtrans = wbtrans.getBtnbind();
-		
-		if (bbrot.getBtnStr().equals(bbzoom.getBtnStr()) ||
-			bbrot.getBtnStr().equals(bbtrans.getBtnStr()) ||
-			bbzoom.getBtnStr().equals(bbtrans.getBtnStr())) {
+
+		if (bbrot.getBtnStr().equals(bbzoom.getBtnStr()) || bbrot.getBtnStr().equals(bbtrans.getBtnStr())
+				|| bbzoom.getBtnStr().equals(bbtrans.getBtnStr())) {
 			lblmsg.setText("duplicate button controls !");
 			lblmsg.setForeground(Color.RED);
 			return true;
@@ -103,11 +104,10 @@ public class DlgMouseControl extends JDialog implements ActionListener {
 		return false;
 	}
 
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("OK")) {
-			if(checkdups()) {
+			if (checkdups()) {
 				return;
 			} else {
 				BtnBind bbrot = wbrot.getBtnbind();
@@ -116,15 +116,15 @@ public class DlgMouseControl extends JDialog implements ActionListener {
 				maptfb.put(OrbitBehaviorFix.TFunc.ZOOM, bbzoom);
 				BtnBind bbtrans = wbtrans.getBtnbind();
 				maptfb.put(OrbitBehaviorFix.TFunc.TRANSLATE, bbtrans);
-			}			
+			}
 			ret = RET_OK;
 			setVisible(false);
-			dispose();			
+			dispose();
 		} else if (e.getActionCommand().equals("CANC")) {
 			ret = RET_CANCEL;
 			setVisible(false);
 			dispose();
-		}		
+		}
 	}
 
 	public Map<OrbitBehaviorFix.TFunc, BtnBind> getMaptfb() {

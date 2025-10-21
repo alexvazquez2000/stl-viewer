@@ -1,10 +1,8 @@
 package org.stlviewer;
 
-import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.Background;
@@ -14,28 +12,25 @@ import org.jogamp.java3d.Bounds;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.Canvas3D;
 import org.jogamp.java3d.DirectionalLight;
-import org.jogamp.java3d.Font3D;
-import org.jogamp.java3d.FontExtrusion;
 import org.jogamp.java3d.GeometryArray;
 import org.jogamp.java3d.LineArray;
 import org.jogamp.java3d.Locale;
 import org.jogamp.java3d.Shape3D;
-import org.jogamp.java3d.Text3D;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.utils.behaviors.vp.OrbitBehavior;
+import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Point3f;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
 
-import org.stlviewer.PModel;
-
-import org.jogamp.java3d.utils.behaviors.vp.OrbitBehavior;
-import org.jogamp.java3d.utils.universe.SimpleUniverse;
-import org.jogamp.java3d.utils.universe.ViewingPlatform;
-
 public class PCanvas3D extends Canvas3D {
+
+	/** Generated serial value */
+	private static final long serialVersionUID = -1099161305026813448L;
 
 	TransformGroup transform = null;
 	OrbitBehaviorFix orbit;
@@ -122,7 +117,7 @@ public class PCanvas3D extends Canvas3D {
 		viewingPlatform.setNominalViewingTransform();
 
 		// add mouse behaviors to the ViewingPlatform
-		//ViewingPlatform viewingPlatform = universe.getViewingPlatform();
+		// ViewingPlatform viewingPlatform = universe.getViewingPlatform();
 		orbit = new OrbitBehaviorFix(this, OrbitBehavior.REVERSE_ALL);
 		BoundingSphere bounds2 = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
 		orbit.setSchedulingBounds(bounds2);
@@ -204,19 +199,20 @@ public class PCanvas3D extends Canvas3D {
 
 		ViewingPlatform viewingPlatform = universe.getViewingPlatform();
 		orbit = new OrbitBehaviorFix(this, OrbitBehavior.REVERSE_ALL);
-		if(maptfb != null)
+		if (maptfb != null)
 			orbit.setMaptfb(maptfb);
 		BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
 		orbit.setSchedulingBounds(bounds);
 		viewingPlatform.setViewPlatformBehavior(orbit);
 
 	}
-	
+
 	public Map<OrbitBehaviorFix.TFunc, BtnBind> getMaptfb() {
-		if(orbit == null) return null;
+		if (orbit == null)
+			return null;
 		return orbit.getMaptfb();
 	}
-	
+
 	TransformGroup gettransform(SimpleUniverse universe) {
 		if (transform == null) {
 			Locale ulocale = universe.getLocale();

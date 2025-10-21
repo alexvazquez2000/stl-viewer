@@ -15,7 +15,7 @@ public class BtnBind {
 	public BtnBind(TFunc func) {
 		this.func = func;
 	}
-	
+
 	public BtnBind(TFunc func, MouseBtn btn, boolean ctrl, boolean shift) {
 		this.func = func;
 		this.btn = btn;
@@ -54,11 +54,11 @@ public class BtnBind {
 	public void setShift(boolean shift) {
 		this.shift = shift;
 	}
-	
+
 	public boolean checkBtn(MouseBtn btn, boolean ctrl, boolean shift) {
 		return (this.btn == btn) && (this.ctrl == ctrl) && (this.shift == shift);
 	}
-	
+
 	public String getBtnStr() {
 		StringBuilder sb = new StringBuilder(100);
 		String btnstr = btn.name();
@@ -69,15 +69,15 @@ public class BtnBind {
 		sb.append(Boolean.toString(shift));
 		return sb.toString();
 	}
-	
+
 	public void parseBtnStr(String text) {
 		String parm[] = text.split(",");
 		String btnstr = parm[0];
-		if(btnstr.equals(OrbitBehaviorFix.MouseBtn.LEFT.name())) {
+		if (btnstr.equals(OrbitBehaviorFix.MouseBtn.LEFT.name())) {
 			this.btn = OrbitBehaviorFix.MouseBtn.LEFT;
-		} else if(btnstr.equals(OrbitBehaviorFix.MouseBtn.MIDDLE.name())) {
+		} else if (btnstr.equals(OrbitBehaviorFix.MouseBtn.MIDDLE.name())) {
 			this.btn = OrbitBehaviorFix.MouseBtn.MIDDLE;
-		} else if(btnstr.equals(OrbitBehaviorFix.MouseBtn.RIGHT.name())) {
+		} else if (btnstr.equals(OrbitBehaviorFix.MouseBtn.RIGHT.name())) {
 			this.btn = OrbitBehaviorFix.MouseBtn.RIGHT;
 		}
 		try {
@@ -86,10 +86,10 @@ public class BtnBind {
 		}
 		try {
 			this.shift = Boolean.parseBoolean(parm[2]);
-		} catch (Exception e) {			
-		}		
+		} catch (Exception e) {
+		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.func.name().concat(",").concat(getBtnStr());

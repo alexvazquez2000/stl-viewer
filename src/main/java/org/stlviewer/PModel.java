@@ -1,9 +1,5 @@
 package org.stlviewer;
 
-import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,34 +11,32 @@ import org.jogamp.java3d.Shape3D;
 import org.jogamp.java3d.Texture;
 import org.jogamp.java3d.Texture2D;
 import org.jogamp.java3d.TextureAttributes;
+import org.jogamp.java3d.utils.geometry.GeometryInfo;
+import org.jogamp.java3d.utils.geometry.NormalGenerator;
+import org.jogamp.java3d.utils.geometry.Stripifier;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Color4f;
 import org.jogamp.vecmath.Point3f;
 import org.jogamp.vecmath.Vector3f;
 
-
-import org.jogamp.java3d.utils.geometry.GeometryInfo;
-import org.jogamp.java3d.utils.geometry.NormalGenerator;
-import org.jogamp.java3d.utils.geometry.Stripifier;
-
 import hall.collin.christopher.stl4j.Triangle;
 import hall.collin.christopher.stl4j.Vec3d;
 
 public class PModel extends BranchGroup {
-	
+
 	private static Logger logger = Logger.getLogger(PModel.class.getName());
-	
+
 	private boolean bnormstrip = true;
 
-	public PModel() {		
+	public PModel() {
 		init();
 	}
 
 	public PModel(String name) {
 		setName(name);
 		setCapability(BranchGroup.ALLOW_DETACH);
-	}		
-	
+	}
+
 	public boolean isBnormstrip() {
 		return bnormstrip;
 	}
@@ -56,7 +50,6 @@ public class PModel extends BranchGroup {
 		setCapability(BranchGroup.ALLOW_DETACH);
 	}
 
-	
 	public void addtriangles(List<Triangle> triangles) {
 
 		// Store the scene info on a GeometryInfo
@@ -72,10 +65,7 @@ public class PModel extends BranchGroup {
 			normarray[i] = new Vector3f((float) v.x, (float) v.y, (float) v.z);
 			Vec3d[] vertex = t.getVertices();
 			for (int j = 0; j < 3; j++) {
-				coordarray[i*3+j] = new Point3f(
-						(float) vertex[j].x, 
-						(float) vertex[j].y, 
-						(float) vertex[j].z);
+				coordarray[i * 3 + j] = new Point3f((float) vertex[j].x, (float) vertex[j].y, (float) vertex[j].z);
 			}
 			i++;
 		}
@@ -83,7 +73,7 @@ public class PModel extends BranchGroup {
 		gi.setCoordinates(coordarray);
 		gi.setNormals(normarray);
 		// gi.setStripCounts(stripCounts);
-		
+
 		if (bnormstrip)
 			try {
 				// generate normals
@@ -96,11 +86,12 @@ public class PModel extends BranchGroup {
 				String msg = new String("unable to generate normals or stripify:");
 				msg = msg.concat(e.getMessage());
 				Logger.getLogger(PModel.class.getName()).log(Level.WARNING, msg);
-			};
+			}
+		;
 
 		// yellow appearance
 		Appearance appearance = new Appearance();
-		Color3f color = new Color3f(1.0f, 1.0f, 0.0f); //yellow
+		Color3f color = new Color3f(1.0f, 1.0f, 0.0f); // yellow
 		Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
 		Color3f white = new Color3f(1.0f, 1.0f, 1.0f);
 		Texture texture = new Texture2D();
@@ -120,11 +111,10 @@ public class PModel extends BranchGroup {
 		shape.setAppearance(appearance);
 
 		addChild(shape);
-		//scene.addNamedObject(objectName, shape);
+		// scene.addNamedObject(objectName, shape);
 
-	} 
+	}
 
-	
 	public void cleanup() {
 		detach();
 		removeAllChildren();

@@ -1,10 +1,8 @@
 package org.stlviewer;
 
-import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +21,9 @@ import javax.swing.SwingConstants;
 
 public class About extends JFrame {
 
+	/** Generated serial value */
+	private static final long serialVersionUID = 5971969218525355940L;
+
 	public About() throws HeadlessException {
 		super("About");
 		setPreferredSize(new Dimension(800, 650));
@@ -30,10 +31,10 @@ public class About extends JFrame {
 	}
 
 	private void createwin() {
-		
+
 		BoxLayout layout = new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS);
 		getContentPane().setLayout(layout);
-		
+
 		JLabel l1 = new JLabel("About STL Viewer for java");
 		Font font = l1.getFont();
 		font = font.deriveFont(Font.BOLD, font.getSize2D());
@@ -41,9 +42,8 @@ public class About extends JFrame {
 		l1.setAlignmentX(LEFT_ALIGNMENT);
 		getContentPane().add(l1);
 
-		
 		font = new JLabel("").getFont();
-		font = font.deriveFont(Font.PLAIN, font.getSize2D()-1.0f);
+		font = font.deriveFont(Font.PLAIN, font.getSize2D() - 1.0f);
 
 		StringBuffer sb = new StringBuffer();
 		try {
@@ -53,24 +53,24 @@ public class About extends JFrame {
 				String line = reader.readLine();
 				if (line == null)
 					break;
-				if(line.startsWith("<a")) {
+				if (line.startsWith("<a")) {
 					JLabel l;
-					//close the prior lines
-					if(sb.length()>0) {
+					// close the prior lines
+					if (sb.length() > 0) {
 						String buf;
 						int b = sb.indexOf("<html>");
-						if(b!=-1) 
+						if (b != -1)
 							buf = sb.toString().concat("</html>");
 						else
-							buf = "<html>".concat(sb.toString()).concat("</html>");					
+							buf = "<html>".concat(sb.toString()).concat("</html>");
 						l = new JLabel(buf);
 						l.setFont(font);
-						l.setAlignmentX(LEFT_ALIGNMENT);					
+						l.setAlignmentX(LEFT_ALIGNMENT);
 						getContentPane().add(l);
 					}
-					//create the url button
+					// create the url button
 					String url = parseahref(line);
-					line = "<html>".concat(line).concat("</html>");					
+					line = "<html>".concat(line).concat("</html>");
 					try {
 						JButton btn;
 						btn = createlinkbtn(url, line);
@@ -80,37 +80,36 @@ public class About extends JFrame {
 					} catch (URISyntaxException e) {
 						l = new JLabel(line);
 						l.setFont(font);
-						l.setAlignmentX(LEFT_ALIGNMENT);					
+						l.setAlignmentX(LEFT_ALIGNMENT);
 						getContentPane().add(l);
 					}
-					//start a new buffer
+					// start a new buffer
 					sb = new StringBuffer();
 				} else
 					sb.append(line);
-			}			
+			}
 			String buf;
 			int b = sb.indexOf("<html>");
-			if(b!=-1) 
+			if (b != -1)
 				buf = sb.toString().concat("</html>");
 			else
-				buf = "<html>".concat(sb.toString()).concat("</html>");								
+				buf = "<html>".concat(sb.toString()).concat("</html>");
 			l1 = new JLabel(buf);
 			l1.setFont(font);
-			l1.setAlignmentX(LEFT_ALIGNMENT);					
-			getContentPane().add(l1);						
-			
+			l1.setAlignmentX(LEFT_ALIGNMENT);
+			getContentPane().add(l1);
+
 		} catch (IOException e) {
-			//nothing
+			// nothing
 		}
-		
-		
+
 	}
 
 	public String parseahref(String line) {
 		int b = line.indexOf("href=");
-		int e = line.indexOf('"',b+6); 
-		
-		return line.substring(b+6, e);
+		int e = line.indexOf('"', b + 6);
+
+		return line.substring(b + 6, e);
 	}
 
 	public JButton createlinkbtn(String url, String text) throws URISyntaxException {
@@ -123,13 +122,14 @@ public class About extends JFrame {
 		}
 
 		JButton button = new JButton();
-		//button.setText("<HTML><FONT color=\"#000099\"><U>" + url + "</U></FONT></HTML>");
+		// button.setText("<HTML><FONT color=\"#000099\"><U>" + url +
+		// "</U></FONT></HTML>");
 		button.setText(text);
 		button.setHorizontalAlignment(SwingConstants.LEFT);
 		button.setBorderPainted(false);
 		button.setOpaque(false);
 		button.setContentAreaFilled(false);
-		//button.setBackground(Color.WHITE);
+		// button.setBackground(Color.WHITE);
 		button.setToolTipText(uri.toString());
 		button.addActionListener(new OpenUrlAction());
 		return button;
