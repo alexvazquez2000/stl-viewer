@@ -9,6 +9,11 @@
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j-api.version>2.25.2</log4j-api.version>
+        <!-- to suppress warnings - in particular one that says:
+          warning Direct modification of testCompileSourceRoots through add() is deprecated and will not work in Maven 4.0.0.
+          Please use the add/remove methods instead. If you're using a plugin that causes this warning,
+          please upgrade to the latest version and report an issue if the warning persists. -->
+        <maven.project.sourceRoots.warningsDisabled>true</maven.project.sourceRoots.warningsDisabled>
     </properties>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
