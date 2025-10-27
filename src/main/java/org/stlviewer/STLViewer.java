@@ -66,7 +66,7 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 
 	JCheckBoxMenuItem mnstrp;
 
-	public STLViewer(String args[]) throws HeadlessException {
+	public STLViewer(String[] args) throws HeadlessException {
 		super("STL Viewer");
 		parseargs(args);
 
@@ -185,7 +185,6 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 				logger.info("loading {}", filename);
 				loadfile(file);
 			}
-
 		}
 	}
 
@@ -199,13 +198,13 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 			maptfb.put(TFunc.ROTATE, b);
 		}
 		bind = pref.get("TranslateBind", null);
-		if (!(bind == null || bind == "")) {
+		if (!(bind == null || bind.isEmpty())) {
 			BtnBind b = new BtnBind(OrbitBehaviorFix.TFunc.TRANSLATE);
 			b.parseBtnStr(bind);
 			maptfb.put(TFunc.TRANSLATE, b);
 		}
 		bind = pref.get("ZoomBind", null);
-		if (!(bind == null || bind == "")) {
+		if (!(bind == null || bind.isEmpty())) {
 			BtnBind b = new BtnBind(OrbitBehaviorFix.TFunc.ZOOM);
 			b.parseBtnStr(bind);
 			maptfb.put(TFunc.ZOOM, b);
@@ -246,24 +245,24 @@ public class STLViewer extends JFrame implements ActionListener, WindowListener 
 
 	private File currdir;
 
-	private String getlastdir() {
-		String last_dir = pref.get("last_dir", "");
-		if (last_dir != "") {
-			currdir = new File(last_dir);
+	private String getLastDir() {
+		String lastDir = pref.get("last_dir", "");
+		if ( !lastDir.isEmpty() ) {
+			currdir = new File(lastDir);
 			if (!currdir.isDirectory()) {
 				currdir = null;
-				return last_dir;
+				return lastDir;
 			}
-		} else
-			last_dir = null;
-
-		return last_dir;
+		} else {
+			lastDir = null;
+		}
+		return lastDir;
 	}
 
 	private File askForFile() {
 
 		int action;
-		JFileChooser jfc = new JFileChooser(getlastdir());
+		JFileChooser jfc = new JFileChooser(getLastDir());
 		action = jfc.showOpenDialog(null);
 		if (action != JFileChooser.APPROVE_OPTION) {
 			return null;

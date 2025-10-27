@@ -57,8 +57,8 @@ public class PModel extends BranchGroup {
 
 		// Convert to j3d geometry
 		int ntri = triangles.size();
-		Point3f coordarray[] = new Point3f[ntri * 3];
-		Vector3f normarray[] = new Vector3f[ntri];
+		Point3f[] coordarray = new Point3f[ntri * 3];
+		Vector3f[] normarray = new Vector3f[ntri];
 		int i = 0;
 		for (Triangle t : triangles) {
 			Vec3d v = t.getNormal();

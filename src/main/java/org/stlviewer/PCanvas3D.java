@@ -136,8 +136,7 @@ public class PCanvas3D extends Canvas3D {
 			bounds.getCenter(center);
 
 			// adjust scale of transform to objects
-			if (bounds instanceof BoundingBox) {
-				BoundingBox b = (BoundingBox) bounds;
+			if (bounds instanceof BoundingBox b) {
 				Point3d up = new Point3d();
 				Point3d low = new Point3d();
 				b.getUpper(up);
@@ -153,7 +152,9 @@ public class PCanvas3D extends Canvas3D {
 				double ra = Math.sqrt(center.x * center.x + center.y * center.y);
 				double rb = Math.sqrt(ra * ra + center.z * center.z);
 				double dr = lb - rb;
-				double tx = 0.0, ty = 0.0, tz = 0.0;
+				double tx = 0.0;
+				double ty = 0.0;
+				double tz = 0.0;
 				if (dr > 0) {
 					tx = low.x * scale;
 					ty = low.y * scale;
@@ -166,14 +167,15 @@ public class PCanvas3D extends Canvas3D {
 				t3d.setTranslation(vt);
 				t3d.setScale(scale);
 				objTrans.setTransform(t3d);
-			} else if (bounds instanceof BoundingSphere) {
-				BoundingSphere b = (BoundingSphere) bounds;
+			} else if (bounds instanceof BoundingSphere b) {
 				double r = b.getRadius();
 				double scale = 10.0 / r;
 				double c = Math.sqrt(center.x * center.x + center.y * center.y);
 				double d = Math.sqrt(c * c + center.z * center.z);
 				double dr = d - r;
-				double tx = 0.0, ty = 0.0, tz = 0.0;
+				double tx = 0.0;
+				double ty = 0.0;
+				double tz = 0.0;
 				if (dr > 0) {
 					tx = dr * center.x * scale / d;
 					ty = dr * center.y * scale / d;
@@ -186,17 +188,12 @@ public class PCanvas3D extends Canvas3D {
 				t3d.setTranslation(vt);
 				t3d.setScale(scale);
 				objTrans.setTransform(t3d);
-
 			}
-			;
-
 			objTrans.addChild(model);
-
 		}
 	}
 
 	public void fixmouseinteraction(SimpleUniverse universe, Map<OrbitBehaviorFix.TFunc, BtnBind> maptfb) {
-
 		ViewingPlatform viewingPlatform = universe.getViewingPlatform();
 		orbit = new OrbitBehaviorFix(this, OrbitBehavior.REVERSE_ALL);
 		if (maptfb != null)
@@ -204,7 +201,6 @@ public class PCanvas3D extends Canvas3D {
 		BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
 		orbit.setSchedulingBounds(bounds);
 		viewingPlatform.setViewPlatformBehavior(orbit);
-
 	}
 
 	public Map<OrbitBehaviorFix.TFunc, BtnBind> getMaptfb() {
