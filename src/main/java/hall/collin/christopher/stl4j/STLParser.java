@@ -122,7 +122,7 @@ public class STLParser {
 		return decode.toString().toLowerCase();
 	}
 
-	public int readline(String buf, StringBuilder sb, int offset) {
+	private int readline(String buf, StringBuilder sb, int offset) {
 		int il = buf.indexOf('\n', offset);
 		if (il > -1)
 			sb.append(buf.substring(offset, il - 1));
@@ -131,7 +131,13 @@ public class STLParser {
 		return il;
 	}
 
-	public String lastline(String buf) {
+	/**
+	 * @param buf
+	 * @return
+	 * @deprecated 2025-11-13 - not used in project
+	 */
+	@Deprecated
+	private String lastline(String buf) {
 		int i = buf.length();
 		while (--i > -1) {
 			if (buf.charAt(i) == '\n')
@@ -143,7 +149,7 @@ public class STLParser {
 			return "";
 	}
 
-	public boolean isbinaryfile(byte[] allBytes) throws IllegalArgumentException {
+	private boolean isbinaryfile(byte[] allBytes) throws IllegalArgumentException {
 		if (allBytes.length < 84) {
 			throw new IllegalArgumentException("invalid binary file, length<84");
 		}
@@ -157,7 +163,7 @@ public class STLParser {
 	}
 
 	// little endian
-	public int byteatoint(byte[] bytes) throws IllegalArgumentException {
+	private int byteatoint(byte[] bytes) throws IllegalArgumentException {
 		if (bytes.length != 4) {
 			throw new IllegalArgumentException("Little endian bytes lenght== 4");
 		}
@@ -169,7 +175,13 @@ public class STLParser {
 		return r;
 	}
 
-	public byte[] inttobytea(int value) {
+	/**
+	 * @param value
+	 * @return
+	 * @deprecated 2025-11-13 - not used in project
+	 */
+	@Deprecated
+	private byte[] inttobytea(int value) {
 		byte[] bytes = new byte[4];
 		bytes[0] = (byte) value;
 		bytes[1] = (byte) (value >> 8);
@@ -186,7 +198,7 @@ public class STLParser {
 	 *         file.
 	 * @throws IllegalArgumentException Thrown if the STL is not properly formatted
 	 */
-	public List<Triangle> readASCII(String content) throws IllegalArgumentException {
+	private List<Triangle> readASCII(String content) throws IllegalArgumentException {
 		Logger.getLogger(STLParser.class.getName()).log(Level.FINEST, "Parsing ASCII STL format");
 		// string is lowercase
 		ArrayList<Triangle> triangles = new ArrayList<>();
