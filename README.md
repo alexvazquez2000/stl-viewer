@@ -38,10 +38,7 @@ ant
 
 # Pre-requisites
 
-2025-10-21 Release 1.0.0 - Convert to Maven
-   - Forked project from https://github.com/ag88/stl-viewer into https://github.com/alexvazquez2000/stl-viewer
-   - Converted to Maven
-   - Remove the old jar libraries
+Release 1.0.0 - uses Java 21
 
 Release 0.10.0 requires Java >= 11 Java/JDK 11 or higher to run.
 
@@ -50,6 +47,12 @@ This is the previous working release. This release requires Java 1.8 jdk/jre to 
 - if you are running Java 8, use this release.
 
 # Changelog
+
+Release 1.0.0 - 2025-10-21
+   - Forked project from https://github.com/ag88/stl-viewer into https://github.com/alexvazquez2000/stl-viewer
+   - Converted to Maven
+   - Remove the old jar libraries
+
 
 Release 0.10.0 JDK >= 11
 - fixes for mouse interactions in Java 11
