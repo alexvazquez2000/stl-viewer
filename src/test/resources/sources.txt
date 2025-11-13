@@ -1,0 +1,3 @@
+3D_model_of_a_Cube.stl  from https://commons.wikimedia.org/wiki/File:3D_model_of_a_Cube.stl
+
+cube_ascii.stl  from https://people.sc.fsu.edu/~jburkardt/data/stla/stla.html  The computer code and data files described and made available on this web page are distributed under the GNU LGPL license. 
