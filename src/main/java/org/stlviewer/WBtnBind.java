@@ -19,7 +19,7 @@ public class WBtnBind extends JPanel implements ItemListener, ActionListener {
 	private JCheckBox cbControl;
 	private JCheckBox cbShift;
 
-	final String btnstr[] = { "Left", "Middle", "Right" };
+	final String[] btnstr = { "Left", "Middle", "Right" };
 
 	public WBtnBind(BtnBind btnbind) {
 		super();

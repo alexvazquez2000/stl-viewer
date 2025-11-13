@@ -1,13 +1,17 @@
 package org.stlviewer;
 
+import java.io.Serializable;
+
 import org.stlviewer.OrbitBehaviorFix.MouseBtn;
 import org.stlviewer.OrbitBehaviorFix.TFunc;
 
-public class BtnBind {
-	public OrbitBehaviorFix.TFunc func;
-	public OrbitBehaviorFix.MouseBtn btn;
-	public boolean ctrl;
-	public boolean shift;
+public class BtnBind implements Serializable {
+	/** Generated serial value */
+	private static final long serialVersionUID = -5677406546321737584L;
+	private OrbitBehaviorFix.TFunc func;
+	private OrbitBehaviorFix.MouseBtn btn;
+	private boolean ctrl;
+	private boolean shift;
 
 	public BtnBind() {
 	}
