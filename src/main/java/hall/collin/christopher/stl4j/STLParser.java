@@ -76,14 +76,14 @@ public class STLParser {
 
 		// read the first 512 chars or less
 		String buf = readblock(allBytes, 0, 512);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		int inl = readline(buf, sb, 0);
 		String line = sb.toString();
 		StringTokenizer st = new StringTokenizer(line);
 		String token = st.nextToken();
 		if (token.equals("solid")) { // start with "solid"
 			if (inl > -1) { // found new line for next line
-				sb = new StringBuffer();
+				sb = new StringBuilder();
 				inl = readline(buf, sb, inl + 1); // read next line
 				line = sb.toString();
 				st = new StringTokenizer(line);
@@ -122,7 +122,7 @@ public class STLParser {
 		return decode.toString().toLowerCase();
 	}
 
-	public int readline(String buf, StringBuffer sb, int offset) {
+	public int readline(String buf, StringBuilder sb, int offset) {
 		int il = buf.indexOf('\n', offset);
 		if (il > -1)
 			sb.append(buf.substring(offset, il - 1));
@@ -160,7 +160,7 @@ public class STLParser {
 	public int byteatoint(byte[] bytes) throws IllegalArgumentException {
 		if (bytes.length != 4) {
 			throw new IllegalArgumentException("Little endian bytes lenght== 4");
-		};
+		}
 		int r = 0;
 		r = bytes[0] & 0xff;
 		r |= (bytes[1] & 0xff) << 8;

@@ -188,8 +188,7 @@ public final class Vec3d {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof Vec3d) {
-			Vec3d v = (Vec3d) obj;
+		if (obj instanceof Vec3d v) {
 			return (x == v.x) && (y == v.y) && (z == v.z);
 		}
 		return false;
@@ -214,9 +213,9 @@ public final class Vec3d {
 	 * @return The angle between the two vectors, in radians.
 	 */
 	public static double getAngle(Vec3d a, Vec3d b) {
-		double AdotB = a.dot(b);
-		double A = a.length();
-		double B = b.length();
-		return Math.acos(AdotB / (A * B));
+		double aDotB = a.dot(b);
+		double aLen = a.length();
+		double bLen = b.length();
+		return Math.acos(aDotB / (aLen * bLen));
 	}
 }
