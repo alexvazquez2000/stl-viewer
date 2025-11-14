@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Alex Vazquez <vazqueza2000@gmail.com>
+ */
 class TriangleTest {
 
 	private Triangle t1;

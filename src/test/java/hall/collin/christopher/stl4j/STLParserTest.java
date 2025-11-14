@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Alex Vazquez <vazqueza2000@gmail.com>
+ */
 class STLParserTest {
 
 	@Test
