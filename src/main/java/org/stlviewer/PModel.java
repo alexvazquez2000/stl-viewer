@@ -24,7 +24,7 @@ import hall.collin.christopher.stl4j.Vec3d;
 
 public class PModel extends BranchGroup {
 
-	//private static Logger logger = Logger.getLogger(PModel.class.getName());
+	private static Logger logger = Logger.getLogger(PModel.class.getName());
 
 	private boolean bnormstrip = true;
 
@@ -72,9 +72,8 @@ public class PModel extends BranchGroup {
 
 		gi.setCoordinates(coordarray);
 		gi.setNormals(normarray);
-		// gi.setStripCounts(stripCounts);
 
-		if (bnormstrip)
+		if (bnormstrip) {
 			try {
 				// generate normals
 				NormalGenerator ng = new NormalGenerator();
@@ -83,11 +82,11 @@ public class PModel extends BranchGroup {
 				Stripifier st = new Stripifier();
 				st.stripify(gi);
 			} catch (Exception e) {
-				String msg = new String("unable to generate normals or stripify:");
+				String msg = "unable to generate normals or stripify:";
 				msg = msg.concat(e.getMessage());
-				Logger.getLogger(PModel.class.getName()).log(Level.WARNING, msg);
+				logger.log(Level.WARNING, msg);
 			}
-		;
+		}
 
 		// yellow appearance
 		Appearance appearance = new Appearance();
@@ -111,8 +110,6 @@ public class PModel extends BranchGroup {
 		shape.setAppearance(appearance);
 
 		addChild(shape);
-		// scene.addNamedObject(objectName, shape);
-
 	}
 
 	public void cleanup() {
