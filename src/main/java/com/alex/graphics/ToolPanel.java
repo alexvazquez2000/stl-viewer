@@ -7,27 +7,30 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class ToolPanel extends JPanel{
+import com.alex.graphics.utils.Utils;
+
+/**
+ * @author Alex Vazquez <vazqueza2000@gmail.com>
+ */
+public class ToolPanel extends JPanel {
+
+	/** Generated serial ID */
+	private static final long serialVersionUID = 5198424878189812263L;
 
 	public ToolPanel() {
-		String[] images = {"select",
-				"line",
-				"square",
-				"rectangle",
-				"circle",
-				"oval"
-		};
-		setLayout(new GridLayout(images.length, 1) );
-		
+		String[] imageNames = { "select", "line", "square", "rectangle", "circle", "oval" };
+		setLayout(new GridLayout(imageNames.length, 1));
+
 		ImageIcon icon = null;
-		for (String image : images) {
-		      java.net.URL imgURL = ToolPanel.class.getResource("/buttons/" + image + ".png");
-		      if (imgURL != null) {
-		    	  icon = new ImageIcon(imgURL);
-		      } else {
-		         JOptionPane.showMessageDialog(this.getParent(), "Icon " + image + ".png image not found.");
-		      }
+		for (String imageName : imageNames) {
+			java.net.URL imgURL = ToolPanel.class.getResource("/buttons/" + imageName + ".png");
+			if (imgURL != null) {
+				icon = new ImageIcon(imgURL);
+			} else {
+				JOptionPane.showMessageDialog(this.getParent(), "Icon " + imageName + ".png image not found.");
+			}
 			JButton button = new JButton(icon);
+			button.setToolTipText(Utils.firstCharToUpper(imageName));
 			add(button);
 		}
 	}
